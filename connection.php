@@ -17,4 +17,14 @@
     $stmt->bindParam(':todo',$data,PDO::PARAM_STR);
     $stmt->execute();
   }
+  // 全権取得
+  function selectAll() {
+    $dbh = connectPdo();
+    $sql = 'SELECT * FROM todos WHERE deleted_at IS NULL';
+    $todo = array();
+    foreach($dbh->query($sql) as $row) {
+      array_push($todo,$row);
+    }
+    return $todo;
+  }
 ?>
