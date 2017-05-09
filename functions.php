@@ -1,7 +1,32 @@
 <?php
   require('connection.php');
+  session_start();
+  function h($s) {
+    return htmlspecialchars($s, ENT_QUOTES, "UTF-8");
+  }
+
+  function setToken() {
+    $token = sha1(uniqid(mt_rand(), true));
+    $_SESSION['token'] = $token;
+  }
+
+  function checkToken($data) {
+    if(empty($_SESSION['token']) || ($_SESSION['token'] != $data)) {
+      $_SESSION['err'] = '不正な操作です';
+      header('location: '.$_SERVER['HTTP_REFERER'].'');
+      exit();
+    }
+    return true;
+  }
+
+  function unsetSession() {
+    if(!empty($_SESSION['err'])) $_SESSION['err'] = '';
+  }
+
   function create($data) {
-    insertDb($data['todo']);
+    if(checkToken($data['token'])) {
+      insertDb($data['todo']);
+    }
   }
 
   // 全件取得
@@ -10,8 +35,9 @@
   }
   //　更新
   function update($data) {
-    var_dump($data);
-    updateDb($data['id'],$data['todo']);
+    if(checkToken($data['token'])) {
+      updateDb($data['id'],$data['todo']);
+    }
   }
   //詳細の取得
   function detail($id) {
