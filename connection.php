@@ -29,6 +29,9 @@
   }
   // 更新処理
   function updateDb($id, $data) {
+    var_dump("updateDbTESt");
+    var_dump($id);
+    var_dump($data);
     $dbh = connectPdo();
     $sql = 'UPDATE todos SET todo = :todo WHERE id = :id';
     $stmt = $dbh->prepare($sql);
@@ -44,5 +47,14 @@
     $stmt->execute(array(':id' => (int)$id));
     $data = $stmt->fetch();
     return $data['todo'];
+  }
+  function deleteDb($id) {
+    $dbh = connectPdo();
+    $nowTime = date("Y-m-d H:i:s");
+    $sql = 'UPDATE todos SET deleted_at = :deleted_at WHERE id = :id';
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':deleted_at', $nowTime);
+    $stmt->bindValue(':id',$id, PDO::PARAM_INT);
+    $stmt->execute();
   }
 ?>
