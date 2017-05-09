@@ -44,26 +44,30 @@
     return getSelectData($id);
   }
   function checkReferer() {
-    var_dump("test0");
     $httpArr = parse_url($_SERVER['HTTP_REFERER']);
     return $res = transition($httpArr['path']);
   }
   function transition($path) {
+    unsetSession();
     $data = $_POST;
-    var_dump($data);
-    var_dump($path);
+    if(isset($data['todo'])) $res = validate($data['todo']);
     if($path === '/index.php' && $data['type'] === 'delete') {
       deleteData($data['id']);
       return 'index';
-    }
-    elseif($path === '/new.php') {
+    }elseif(!$res || !empty($_SESSION['err'])){
+      return 'back';
+    }elseif($path === '/new.php') {
       create($data);
     }elseif($path === '/edit.php') {
       update($data);
     }
-    //exit();
   }
+
   function deleteData($id) {
     deleteDb($id);
   }
+
+  function validate($data) {
+  return $res = $data != "" ? true : $_SESSION['err'] = '入力がありません'; 
+}
 ?>
