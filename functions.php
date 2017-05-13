@@ -45,16 +45,27 @@
   }
   function checkReferer() {
     $httpArr = parse_url($_SERVER['HTTP_REFERER']);
+    //とりあえず関係ないけどここに異常系入れたい
     return $res = transition($httpArr['path']);
   }
   function transition($path) {
     unsetSession();
     $data = $_POST;
-    if(isset($data['todo'])) $res = validate($data['todo']);
+    if(isset($data['todo'])) {
+      $res = validate($data['todo']);
+    }
     if($path === '/index.php' && $data['type'] === 'delete') {
       deleteData($data['id']);
       return 'index';
-    }elseif(!$res || !empty($_SESSION['err'])){
+    }elseif($path === '/login.php' && $data['type'] === 'login') {
+      //ログイン処理
+      if(checkentry($data) === '/index.php') {
+        $_SESSION['myname'] = $data['my_name'];
+        return 'index.php';
+      }else {
+        $_SESSION['err'] = 'ユーザー名またはパスワードが間違っています';
+      }
+    }elseif(!$res || !empty($_SESSION['err'])) {
       return 'back';
     }elseif($path === '/new.php') {
       create($data);
@@ -68,6 +79,25 @@
   }
 
   function validate($data) {
-  return $res = $data != "" ? true : $_SESSION['err'] = '入力がありません'; 
+  return $res = $data != "" ? true : $_SESSION['err'] = '入力がありません';
 }
+
+  // ログインの判定
+  function checkloguin() {
+    return isset($_SESSION['myname']);
+  }
+
+  // ユーザ情報の比較
+  function checkentry($data) {
+    $ans = "";
+    $entrylist = getentry();
+    foreach($entrylist as $var) {
+      if(($var["name"] === $data["my_name"]) && ($var["name"] === $data["password"])) {
+        $ans = '/index.php';
+      }else{
+        $ans = '/login.php';
+      }
+    }
+    return $ans;
+  }
 ?>

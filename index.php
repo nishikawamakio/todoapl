@@ -1,6 +1,10 @@
 <?php
   require('functions.php');
-  unsetSession();
+  $login = checkloguin();
+  if(!$login) {
+    header('location: /login.php');
+  }
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -9,7 +13,6 @@
   <title>Home</title>
 </head>
 <body>
-  welocome hello world
   <div>
     <a href="new.php">
       <p>新規作成</p>
@@ -23,7 +26,7 @@
           <th>更新</th>
           <th>削除</th>
         </tr>
-        <?php foreach (index() as $todo): ?>
+        <?php foreach(index() as $todo): ?>
           <tr>
             <td><?php echo h($todo['id']) ?></td>
             <td><?php echo h($todo['todo']) ?></td>

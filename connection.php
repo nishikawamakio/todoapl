@@ -29,9 +29,6 @@
   }
   // 更新処理
   function updateDb($id, $data) {
-    var_dump("updateDbTESt");
-    var_dump($id);
-    var_dump($data);
     $dbh = connectPdo();
     $sql = 'UPDATE todos SET todo = :todo WHERE id = :id';
     $stmt = $dbh->prepare($sql);
@@ -56,5 +53,22 @@
     $stmt->bindParam(':deleted_at', $nowTime);
     $stmt->bindValue(':id',$id, PDO::PARAM_INT);
     $stmt->execute();
+  }
+
+  // ユーザ登録情報取得
+  function getentry() {
+    $dbh = connectPdo();
+    $sql = 'SELECT * FROM entrylist WHERE deleted_at IS NULL';
+    $list = array();
+    foreach($dbh->query($sql) as $row) {
+      array_push($list,$row);
+    }
+    return $list;
+  }
+
+  // ユーザ情報登録
+  function setentry($data) {
+    //insert into entrylist(name,pass) values(1, 18, 'Satou');
+
   }
 ?>
