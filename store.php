@@ -9,6 +9,8 @@
     header('location: ./login.php');
   }elseif($res === 'entry') {
     header('location: ./newentry.php');
+  }elseif($res === 'reset'){
+    header('location: ./resetpassword.php');
   }
   else {
     header('location: '.$_SERVER['HTTP_REFERER'].'');

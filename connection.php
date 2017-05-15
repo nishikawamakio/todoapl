@@ -65,7 +65,6 @@
     }
     return $list;
   }
-
   // ユーザ情報登録
   function setentry($data) {
     $dbh = connectPdo();
@@ -73,6 +72,15 @@
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':name',$data['my_name'],PDO::PARAM_STR);
     $stmt->bindParam(':pass',$data['password'],PDO::PARAM_STR);
+    $stmt->execute();
+  }
+  /* パスワードの変更 */
+  function updataentry($data) {
+    $dbh = connectPdo();
+    $sql = 'UPDATE entrylist SET pass = :pass WHERE id = :id';
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':pass', $data['password_one'], PDO::PARAM_STR);
+    $stmt->bindParam(':id', $_SESSION['id'], PDO::PARAM_STR);
     $stmt->execute();
   }
 ?>

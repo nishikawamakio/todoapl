@@ -4,7 +4,6 @@
   if(!$login) {
     header('location: /login.php');
   }
-
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -16,6 +15,9 @@
   <div>
     <a href="new.php">
       <p>新規作成</p>
+    </a>
+    <a href="resetpassword.php">
+      <p>パスワードリセット</p>
     </a>
   </div>
   <div>

@@ -46,7 +46,7 @@
   function checkReferer() {
     $httpArr = parse_url($_SERVER['HTTP_REFERER']);
     //とりあえず関係ないけどここに異常系入れたい
-    return $res = transition($httpArr['path']);//要求URL
+    return $res = transition($httpArr['path']);
   }
   function transition($path) {
     unsetSession();
@@ -75,7 +75,18 @@
         return 'index';
       }
       return 'entry';
-    }elseif(!$res || !empty($_SESSION['err'])) {
+    }elseif($path === '/resetpassword.php' && $data['type'] === 'resetpassword') {
+      /* パスワードリセット */
+      if(checkentry($data)) {
+        updataentry($data);
+        $_SESSION['myname'] = $data['my_name'];
+        return 'index';
+      }else {
+          $_SESSION['err'] = 'ユーザー名またはパスワードが間違っています';
+          return 'reset';
+      }
+    }
+    elseif(!$res || !empty($_SESSION['err'])) {
       return 'back';
     }elseif($path === '/new.php') {
       create($data);
@@ -96,16 +107,28 @@
   function checkloguin() {
     return isset($_SESSION['myname']);
   }
+  function resetentry($data) {
+    $ans = false;
+    //データ比較
+    if($data['password_one'] === $data['password_two']) {
+      reset($data);
+    }else {
+      $_SESSION['err'] = '新しいパスワードが間違っています';
+    }
+  }
 
   // ユーザ情報の比較
   function checkentry($data) {
     $ans = false;
     $entrylist = getentry();
+
     foreach($entrylist as $var) {
-      if(($var["name"] === $data["my_name"]) && ($var["name"] === $data["password"])) {
+      if($var["name"] === $data["my_name"]) {
+        $_SESSION['id'] = $var['id'];
         $ans = true;
       }
     }
+    //exit();
     return $ans;
   }
 ?>
