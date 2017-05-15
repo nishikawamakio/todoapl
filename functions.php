@@ -46,7 +46,7 @@
   function checkReferer() {
     $httpArr = parse_url($_SERVER['HTTP_REFERER']);
     //とりあえず関係ないけどここに異常系入れたい
-    return $res = transition($httpArr['path']);
+    return $res = transition($httpArr['path']);//要求URL
   }
   function transition($path) {
     unsetSession();
@@ -59,12 +59,22 @@
       return 'index';
     }elseif($path === '/login.php' && $data['type'] === 'login') {
       //ログイン処理
-      if(checkentry($data) === '/index.php') {
+      if(checkentry($data)) {
         $_SESSION['myname'] = $data['my_name'];
-        return 'index.php';
+        return 'index';
       }else {
         $_SESSION['err'] = 'ユーザー名またはパスワードが間違っています';
       }
+    }elseif($path === '/newentry.php' && $data['type'] === 'entry') {
+      /* 新規登録 */
+      if(checkentry($data)) {
+        $_SESSION['err'] = '既に登録されています';
+      }else {
+        setentry($data);
+        $_SESSION['myname'] = $data['my_name'];
+        return 'index';
+      }
+      return 'entry';
     }elseif(!$res || !empty($_SESSION['err'])) {
       return 'back';
     }elseif($path === '/new.php') {
@@ -89,13 +99,11 @@
 
   // ユーザ情報の比較
   function checkentry($data) {
-    $ans = "";
+    $ans = false;
     $entrylist = getentry();
     foreach($entrylist as $var) {
       if(($var["name"] === $data["my_name"]) && ($var["name"] === $data["password"])) {
-        $ans = '/index.php';
-      }else{
-        $ans = '/login.php';
+        $ans = true;
       }
     }
     return $ans;

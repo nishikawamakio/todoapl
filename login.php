@@ -25,7 +25,11 @@ session_destroy();
         <dd><input type="password" name="password" id="password" /></dd>
     </dl>
     <p><input type="checkbox" name="save" id="save" value="on" /><label for="save" >IDを保存する</label></p>
-    <input type="submit" value="送信する" />
+    <input type="submit" value="ログイン" />
+</form>
+<form action="newentry.php" class="">
+    <input type="hidden" name="type" value="entry.php">
+    <input type="submit" value="新規登録">
 </form>
     <?php if(isset($_SESSION['err'])): ?>
         <p><?php echo $_SESSION['err'] ?></p>

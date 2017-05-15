@@ -1,6 +1,10 @@
 <?php
   require_once('functions.php');
   setToken();
+  $login = checkloguin();
+if(!$login) {
+  header('location: /login.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">

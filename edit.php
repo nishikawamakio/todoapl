@@ -2,6 +2,10 @@
 require_once('functions.php');
 setToken();
 $data = detail($_GET['id']);
+$login = checkloguin();
+if(!$login) {
+  header('location: /login.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">

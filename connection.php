@@ -68,7 +68,11 @@
 
   // ユーザ情報登録
   function setentry($data) {
-    //insert into entrylist(name,pass) values(1, 18, 'Satou');
-
+    $dbh = connectPdo();
+    $sql = 'INSERT INTO entrylist (name,pass) VALUES (:name,:pass)';
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':name',$data['my_name'],PDO::PARAM_STR);
+    $stmt->bindParam(':pass',$data['password'],PDO::PARAM_STR);
+    $stmt->execute();
   }
 ?>
