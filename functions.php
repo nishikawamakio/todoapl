@@ -111,7 +111,7 @@
     if(($data['password_one'] === $data['password_two']) && ($data['password_one'] != "")) {
       $ans = true;
     }else {
-      $_SESSION['err'] = '新しいパスワードが間違っています';
+      $_SESSION['err'] = '新パスワードと確認用パスワードが間違っています';
     }
     return $ans;
   }

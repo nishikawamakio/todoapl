@@ -23,7 +23,7 @@
           <dd><input type="password" name="password" id="password" /></dd>
           <dt>新パスワード</dt>
           <dd><input type="password" name="password_one" id="password" /></dd>
-          <dt>新パスワード</dt>
+          <dt>確認用パスワード</dt>
           <dd><input type="password" name="password_two" id="password" /></dd>
       </dl>
       <input type="submit" value="登録" />
