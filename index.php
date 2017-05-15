@@ -20,6 +20,7 @@
       <p>パスワードリセット</p>
     </a>
   </div>
+  <a href="login.php">ログイン画面へ戻る</a>
   <div>
     <table>
         <tr>

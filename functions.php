@@ -67,9 +67,7 @@
       }
     }elseif($path === '/newentry.php' && $data['type'] === 'entry') {
       /* 新規登録 */
-      if(checkentry($data)) {
-        $_SESSION['err'] = '既に登録されています';
-      }else {
+      if(checknewentry($data)) {
         setentry($data);
         $_SESSION['myname'] = $data['my_name'];
         return 'index';
@@ -77,12 +75,11 @@
       return 'entry';
     }elseif($path === '/resetpassword.php' && $data['type'] === 'resetpassword') {
       /* パスワードリセット */
-      if(checkentry($data)) {
+      if(resetentry($data) && checkentry($data)) {
         updataentry($data);
         $_SESSION['myname'] = $data['my_name'];
         return 'index';
       }else {
-          $_SESSION['err'] = 'ユーザー名またはパスワードが間違っています';
           return 'reset';
       }
     }
@@ -107,28 +104,48 @@
   function checkloguin() {
     return isset($_SESSION['myname']);
   }
+  // パスワードリセット時の比較
   function resetentry($data) {
     $ans = false;
     //データ比較
-    if($data['password_one'] === $data['password_two']) {
-      reset($data);
+    if(($data['password_one'] === $data['password_two']) && ($data['password_one'] != "")) {
+      $ans = true;
     }else {
       $_SESSION['err'] = '新しいパスワードが間違っています';
     }
+    return $ans;
+  }
+  //新規登録
+  function checknewentry($data) {
+    $ans = ture;
+    $entrylist = getentry();
+    if($data["my_name"] === '' || $data["password"] === '') {
+      $_SESSION['err'] = 'ユーザ名とパスワードを入力してください';
+      $ans = false;
+    }
+    foreach($entrylist as $var) {
+      if($var["name"] === $data["my_name"]) {
+        //　既に登録されていれば弾く
+        $_SESSION['err'] = '既に登録されています';
+        $ans = false;
+      }
+    }
+    return $ans;
   }
 
   // ユーザ情報の比較
   function checkentry($data) {
     $ans = false;
     $entrylist = getentry();
-
     foreach($entrylist as $var) {
-      if($var["name"] === $data["my_name"]) {
+      if($var["name"] === $data["my_name"] && $var["pass"] === $data["password"]) {
         $_SESSION['id'] = $var['id'];
         $ans = true;
       }
+      else{
+        $_SESSION['err'] = 'パスワードが間違っています';
+      }
     }
-    //exit();
     return $ans;
   }
 ?>

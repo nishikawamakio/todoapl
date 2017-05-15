@@ -20,7 +20,6 @@ session_destroy();
     <dl>
         <dt>ユーザ名</dt>
         <dd><input type="text" name="my_name" value="<?php echo $myId; ?>"></dd>
-
         <dt>パスワード</dt>
         <dd><input type="password" name="password" id="password" /></dd>
     </dl>

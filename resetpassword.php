@@ -28,6 +28,7 @@
       </dl>
       <input type="submit" value="登録" />
 </form>
+      <a href="index.php">一覧へ戻る</a>
       <?php if(isset($_SESSION['err'])): ?>
         <p><?php echo $_SESSION['err'] ?></p>
       <?php endif; ?>

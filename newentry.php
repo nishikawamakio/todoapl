@@ -1,6 +1,5 @@
 <?php
   require_once('functions.php');
-  //setToken();
 if (isset($_COOKIE['my_id'])){
     $myId = $_COOKIE['my_id'];
 }else{
@@ -25,6 +24,7 @@ if (isset($_COOKIE['my_id'])){
     <p><input type="checkbox" name="save" id="save" value="on" /><label for="save" >IDを保存する</label></p>
     <input type="submit" value="登録する" />
 </form>
+<a href="login.php">ログイン画面へ戻る</a>
 <?php if(isset($_SESSION['err'])): ?>
   <p><?php echo $_SESSION['err'] ?></p>
 <?php endif; ?>
