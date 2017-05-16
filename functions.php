@@ -112,7 +112,6 @@
       $_SESSION['err'] = '新パスワードと確認用パスワードが間違っています';
       return false;
     }
-    return $ans;
   }
 
   //登録確認

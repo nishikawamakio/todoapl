@@ -1,5 +1,3 @@
-CREATE DATABASE php_lesson;
-
 CREATE TABLE todos (
   id MEDIUMINT NOT NULL AUTO_INCREMENT,
   todo varchar(30),
@@ -9,7 +7,7 @@ CREATE TABLE todos (
   PRIMARY KEY(id)
   );
 
-CREATE TABLE entrylist(
+CREATE TABLE user_infos(
   id MEDIUMINT NOT NULL AUTO_INCREMENT,
   name varchar(30),
   pass varchar(30),

@@ -63,7 +63,7 @@
   // ユーザ登録情報取得
   function getEntry($data) {
     $dbh = connectPdo();
-    $sql = 'SELECT * FROM entrylist WHERE name = :name AND deleted_at IS NULL';
+    $sql = 'SELECT * FROM user_infos WHERE name = :name AND deleted_at IS NULL';
     $stmt = $dbh->prepare($sql);
     $stmt->execute(array(':name' => (string)$data['user_id']));
     $res = $stmt->fetch();
@@ -74,7 +74,7 @@
   // ユーザ情報登録
   function createEntry($data) {
     $dbh = connectPdo();
-    $sql = 'INSERT INTO entrylist (name,pass) VALUES (:name,:pass)';
+    $sql = 'INSERT INTO user_infos (name,pass) VALUES (:name,:pass)';
     $password = crypt($data['password']);
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':name',$data['user_id'],PDO::PARAM_STR);
@@ -84,10 +84,9 @@
   /* パスワードの変更 */
   function updataEntry($data) {
     $dbh = connectPdo();
-    $sql = 'UPDATE entrylist SET pass = :pass WHERE id = :id';
+    $sql = 'UPDATE user_infos SET pass = :pass WHERE id = :id';
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':pass', $data['password_one'], PDO::PARAM_STR);
     $stmt->bindParam(':id', $_SESSION['id'], PDO::PARAM_STR);
     $stmt->execute();
   }
-?>
