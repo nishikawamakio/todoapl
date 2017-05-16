@@ -45,7 +45,6 @@
   }
   function checkReferer() {
     $httpArr = parse_url($_SERVER['HTTP_REFERER']);
-    //とりあえず関係ないけどここに異常系入れたい
     return $res = transition($httpArr['path']);
   }
   function transition($path) {
@@ -57,31 +56,29 @@
     if($path === '/index.php' && $data['type'] === 'delete') {
       deleteData($data['id']);
       return 'index';
-    }elseif($path === '/login.php' && $data['type'] === 'login') {
-      //ログイン処理
-      if(checkentry($data)) {
-        $_SESSION['myname'] = $data['my_name'];
+    }elseif($path === '/login.php') {
+      /* ログイン処理 */
+      if(checkEntry($data) === true) {
+        $_SESSION['user_id'] = $data['user_id'];
         return 'index';
-      }else {
-        $_SESSION['err'] = 'ユーザー名またはパスワードが間違っています';
       }
-    }elseif($path === '/newentry.php' && $data['type'] === 'entry') {
+    }elseif($path === '/newentry.php') {
       /* 新規登録 */
-      if(checknewentry($data)) {
-        setentry($data);
-        $_SESSION['myname'] = $data['my_name'];
+      if(checkEntry($data) === true) {
+        createEntry($data);
+        $_SESSION['user_id'] = $data['user_id'];
         return 'index';
       }
       return 'entry';
-    }elseif($path === '/resetpassword.php' && $data['type'] === 'resetpassword') {
+    }elseif($path === '/resetpassword.php') {
       /* パスワードリセット */
-      if(resetentry($data) && checkentry($data)) {
-        updataentry($data);
-        $_SESSION['myname'] = $data['my_name'];
-        return 'index';
-      }else {
-          return 'reset';
+      if(checkEntry($data) === true) {
+        if(checkReset($data) === true) {
+          updataEntry($data);
+          return 'index';
+        }
       }
+      return 'reset';
     }
     elseif(!$res || !empty($_SESSION['err'])) {
       return 'back';
@@ -90,6 +87,7 @@
     }elseif($path === '/edit.php') {
       update($data);
     }
+    return 'back';
   }
 
   function deleteData($id) {
@@ -101,51 +99,71 @@
 }
 
   // ログインの判定
-  function checkloguin() {
-    return isset($_SESSION['myname']);
+  function checkLoguin() {
+    return isset($_SESSION['user_id']);
   }
+
   // パスワードリセット時の比較
-  function resetentry($data) {
-    $ans = false;
+  function checkReset($data) {
     //データ比較
-    if(($data['password_one'] === $data['password_two']) && ($data['password_one'] != "")) {
-      $ans = true;
+    if(($data['password_one'] === $data['password_two']) && ($data['password_one']) != '') {
+      return true;
     }else {
       $_SESSION['err'] = '新パスワードと確認用パスワードが間違っています';
-    }
-    return $ans;
-  }
-  //新規登録
-  function checknewentry($data) {
-    $ans = ture;
-    $entrylist = getentry();
-    if($data["my_name"] === '' || $data["password"] === '') {
-      $_SESSION['err'] = 'ユーザ名とパスワードを入力してください';
-      $ans = false;
-    }
-    foreach($entrylist as $var) {
-      if($var["name"] === $data["my_name"]) {
-        //　既に登録されていれば弾く
-        $_SESSION['err'] = '既に登録されています';
-        $ans = false;
-      }
+      return false;
     }
     return $ans;
   }
 
-  // ユーザ情報の比較
-  function checkentry($data) {
-    $ans = false;
-    $entrylist = getentry();
-    foreach($entrylist as $var) {
-      if($var["name"] === $data["my_name"] && $var["pass"] === $data["password"]) {
-        $_SESSION['id'] = $var['id'];
-        $ans = true;
+  //登録確認
+  function checkEntry($data) {
+    $entrylist = getEntry($data);
+    switch ($data) {
+      case $data['password'] === '' && $data['user_id'] === '':
+        $_SESSION['err'] = 'ユーザ名とパスワードを入力してください';
+        return false;
+        break;
+      case $data['user_id'] === '':
+        $_SESSION['err'] = 'ユーザ名を入力してください';
+        return false;
+        break;
+      case $data['password'] === '':
+        $_SESSION['err'] = 'パスワードを入力してください';
+        return false;
+        break;
+        /* typeによって分岐する処理 */
+        /* 入力とDBのuser_idが違う場合 */
+      case $data['user_id'] != $entrylist['name']:
+        /* ログイン時とエントリー時で結果を変える */
+        if($data['type'] === 'entry') {
+            return true;
+        }elseif($data['type'] === 'login') {
+          $_SESSION['err'] = 'ユーザ名が間違っています';
+          return false;
+        }
+        break;
+        /* 入力とDBのuser_idが同じ場合 */
+      case $data['user_id'] === $entrylist['name']:
+        /* ログイン時とエントリー時で結果を変える */
+        if($data['type'] === 'entry') {
+          $_SESSION['err'] = '既に登録されているユーザ名です';
+          return false;
+        }elseif($data['type'] === 'login') {
+          if($data['password'] === $entrylist['pass']) {
+            return true;
+          }else {
+            $_SESSION['err'] = 'パスワードが間違っています';
+            return false;
+          }
+        }elseif($data['type'] === 'resetpassword') {
+          if($data['password'] === $entrylist['pass']) {
+            return true;
+          }else {
+            $_SESSION['err'] = '旧パスワードが間違っています';
+            return false;
+          }
+        }
+        break;
       }
-      else{
-        $_SESSION['err'] = 'パスワードが間違っています';
-      }
-    }
-    return $ans;
+    return true;
   }
-?>

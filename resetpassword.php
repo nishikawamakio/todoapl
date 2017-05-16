@@ -12,25 +12,31 @@
   <title>パスワードリセット</title>
 </head>
 <body>
+  <?php if(isset($_SESSION['err'])): ?>
+    <p><?php echo $_SESSION['err'] ?></p>
+  <?php endif; ?>
   <form action="store.php" method="POST">
-      <input type="hidden" name="type" value="resetpassword">
-      <dl>
-          <dt>ユーザ名</dt>
-          <dd><input type="hidden" name="my_name" value="<?php echo $_SESSION['myname'] ?>">
-            <p><?php echo $_SESSION['myname'] ?></p>
-          </dd>
-          <dt>旧パスワード</dt>
-          <dd><input type="password" name="password" id="password" /></dd>
-          <dt>新パスワード</dt>
-          <dd><input type="password" name="password_one" id="password" /></dd>
-          <dt>確認用パスワード</dt>
-          <dd><input type="password" name="password_two" id="password" /></dd>
-      </dl>
-      <input type="submit" value="登録" />
-</form>
+      <label>ユーザ名
+        <?php echo $_SESSION['user_id'] ?>
+        <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id'] ?>">
+      </label>
+      <div>
+        <label>旧パスワード
+          <input type="password" name="password" id="password">
+        </label>
+      </div>
+      <div>
+        <label>新パスワード
+          <input type="password" name="password_one" id="password">
+        </label>
+      </div>
+      <div>
+        <lavele>確認用パスワード
+          <input type="password" name="password_two" id="password">
+        </lavele>
+      </div>
+      <button type="submit" name="type" value="resetpassword">登録</button>
+  </form>
       <a href="index.php">一覧へ戻る</a>
-      <?php if(isset($_SESSION['err'])): ?>
-        <p><?php echo $_SESSION['err'] ?></p>
-      <?php endif; ?>
 </body>
 </html>

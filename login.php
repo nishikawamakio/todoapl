@@ -1,10 +1,5 @@
 <?php
 require_once('functions.php');
-if (isset($_COOKIE['my_id'])){
-    $myId = $_COOKIE['my_id'];
-}else{
-    $myId = '';
-}
 session_destroy();
 ?>
 
@@ -15,23 +10,19 @@ session_destroy();
   <title>TODOアプリログイン画面</title>
 </head>
 <body>
-<form action="store.php" method="POST">
-    <input type="hidden" name="type" value="login">
-    <dl>
-        <dt>ユーザ名</dt>
-        <dd><input type="text" name="my_name" value="<?php echo $myId; ?>"></dd>
-        <dt>パスワード</dt>
-        <dd><input type="password" name="password" id="password" /></dd>
-    </dl>
-    <p><input type="checkbox" name="save" id="save" value="on" /><label for="save" >IDを保存する</label></p>
-    <input type="submit" value="ログイン" />
-</form>
-<form action="newentry.php" class="">
-    <input type="hidden" name="type" value="entry.php">
-    <input type="submit" value="新規登録">
-</form>
-    <?php if(isset($_SESSION['err'])): ?>
-        <p><?php echo $_SESSION['err'] ?></p>
-    <?php endif; ?>
+  <h1>TODOアプリログイン画面</h1>
+  <?php if(isset($_SESSION['err'])): ?>
+    <p><?php echo $_SESSION['err'] ?></p>
+  <?php endif; ?>
+  <form action="store.php" method="POST">
+    <label>ユーザ名
+      <input type="text" name="user_id" value="">
+    </label>
+    <label>パスワード
+      <input type="password" name="password" id="password">
+    </label>
+    <button type="submit" value="login" name="type">ログイン</button>
+  </form>
+  <a href="newentry.php">新規登録</a>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <?php
   require_once('functions.php');
   setToken();
-  $login = checkloguin();
+  $login = checkLoguin();
 if(!$login) {
   header('location: /login.php');
 }

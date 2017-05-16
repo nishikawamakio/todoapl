@@ -2,7 +2,7 @@
 require_once('functions.php');
 setToken();
 $data = detail($_GET['id']);
-$login = checkloguin();
+$login = checkLoguin();
 if(!$login) {
   header('location: /login.php');
 }

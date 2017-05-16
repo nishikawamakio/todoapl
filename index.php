@@ -1,6 +1,6 @@
 <?php
   require('functions.php');
-  $login = checkloguin();
+  $login = checkLoguin();
   if(!$login) {
     header('location: /login.php');
   }
@@ -13,14 +13,10 @@
 </head>
 <body>
   <div>
-    <a href="new.php">
-      <p>新規作成</p>
-    </a>
-    <a href="resetpassword.php">
-      <p>パスワードリセット</p>
-    </a>
+    <a href="new.php">新規作成</a>
+    <a href="resetpassword.php">パスワードリセット</a>
+    <a href="login.php">ログアウト</a>
   </div>
-  <a href="login.php">ログイン画面へ戻る</a>
   <div>
     <table>
         <tr>
