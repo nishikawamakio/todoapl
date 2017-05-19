@@ -14,7 +14,7 @@
 <body>
   <div>
     <a href="new.php">新規作成</a>
-    <a href="resetpassword.php">パスワードリセット</a>
+    <a href="resetpassword.php">パスワード変更</a>
     <a href="login.php">ログアウト</a>
   </div>
   <div>
@@ -30,7 +30,7 @@
             <td><?php echo h($todo['id']) ?></td>
             <td><?php echo h($todo['todo']) ?></td>
             <td>
-              <a href="edit.php?id=<?php echo h($todo['id']) ?>">更新</a>
+              <a href="edit.php?id=<?php $_SESSION['todoid'] = $todo['id'] ?>">更新</a>
             </td>
             <td>
               <form action="store.php" method="POST">

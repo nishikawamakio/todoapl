@@ -1,8 +1,8 @@
 <?php
 require_once('functions.php');
 setToken();
-$data = detail($_GET['id']);
 $login = checkLoguin();
+$data = detail($_SESSION['todoid']);
 if(!$login) {
   header('location: /login.php');
 }
@@ -19,7 +19,7 @@ if(!$login) {
   <?php endif; ?>
   <form action="store.php" method="post">
     <input type="hidden" name="token" value="<?php echo h($_SESSION['token']); ?>">
-    <input type="hidden" name="id" value="<?php echo h($_GET['id']); ?>">
+    <input type="hidden" name="id" value="<?php $_SESSIOM['todoid'] ?>">
     <input type="text" name="todo" value="<?php echo h($data); ?>">
     <input type="submit" value="更新">
   </form>

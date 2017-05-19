@@ -57,12 +57,14 @@
       deleteData($data['id']);
       return 'index';
     }elseif($path === '/login.php') {
+      $data['password'] = hash("sha256", $data['password']);
       /* ログイン処理 */
       if(checkEntry($data) === true) {
         $_SESSION['user_id'] = $data['user_id'];
         return 'index';
       }
     }elseif($path === '/newentry.php') {
+      $data['password'] = hash("sha256", $data['password']);
       /* 新規登録 */
       if(checkEntry($data) === true) {
         createEntry($data);
@@ -71,20 +73,27 @@
       }
       return 'entry';
     }elseif($path === '/resetpassword.php') {
+      $data['password'] = hash("sha256", $data['password']);
       /* パスワードリセット */
       if(checkEntry($data) === true) {
         if(checkReset($data) === true) {
+          $data['password_one'] = hash("sha256", $data['password_one']);
           updataEntry($data);
           return 'index';
         }
       }
       return 'reset';
     }
-    elseif(!$res || !empty($_SESSION['err'])) {
-      return 'back';
-    }elseif($path === '/new.php') {
+    elseif($path === '/new.php') {
+      if(!$res || !empty($_SESSION['err'])) {
+        return 'new';
+      }
       create($data);
     }elseif($path === '/edit.php') {
+      if(!$res || !empty($_SESSION['err'])) {
+        $_SESSION['todoid'] = $data['id'];
+        return 'edit';
+      }
       update($data);
     }
     return 'back';
@@ -116,9 +125,12 @@
 
   //登録確認
   function checkEntry($data) {
+    /* 確認をするために暗号化 */
+    $space = hash("sha256", "");
+    //$data['password'] = hash("sha256", $data['password']);
     $entrylist = getEntry($data);
     switch ($data) {
-      case $data['password'] === '' && $data['user_id'] === '':
+      case $data['password'] === $space && $data['user_id'] === '':
         $_SESSION['err'] = 'ユーザ名とパスワードを入力してください';
         return false;
         break;
@@ -126,7 +138,7 @@
         $_SESSION['err'] = 'ユーザ名を入力してください';
         return false;
         break;
-      case $data['password'] === '':
+      case $data['password'] === $space:
         $_SESSION['err'] = 'パスワードを入力してください';
         return false;
         break;

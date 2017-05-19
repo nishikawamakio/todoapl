@@ -11,6 +11,10 @@
     header('location: ./newentry.php');
   }elseif($res === 'reset') {
     header('location: ./resetpassword.php');
+  }elseif($res === 'new') {
+    header('location: ./new.php');
+  }elseif($res === 'edit') {
+    header('location: ./edit.php');
   }
   else {
     header('location: '.$_SERVER['HTTP_REFERER'].'');
