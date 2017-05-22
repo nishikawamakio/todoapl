@@ -30,7 +30,7 @@
             <td><?php echo h($todo['id']) ?></td>
             <td><?php echo h($todo['todo']) ?></td>
             <td>
-              <a href="edit.php?id=<?php $_SESSION['todoid'] = $todo['id'] ?>">更新</a>
+              <a href="edit.php?id=<?php $_SESSION['todoid'] = $todo['id']; ?>">更新</a>
             </td>
             <td>
               <form action="store.php" method="POST">

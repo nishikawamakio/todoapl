@@ -36,6 +36,9 @@
   //　更新
   function update($data) {
     if(checkToken($data['token'])) {
+      var_dump($data['id']);
+      var_dump($data['todo']);
+      exit;
       updateDb($data['id'],$data['todo']);
     }
   }

@@ -19,7 +19,7 @@ if(!$login) {
   <?php endif; ?>
   <form action="store.php" method="post">
     <input type="hidden" name="token" value="<?php echo h($_SESSION['token']); ?>">
-    <input type="hidden" name="id" value="<?php $_SESSIOM['todoid'] ?>">
+    <input type="hidden" name="id" value="<?php echo h($_SESSION['todoid']); ?>">
     <input type="text" name="todo" value="<?php echo h($data); ?>">
     <input type="submit" value="更新">
   </form>
